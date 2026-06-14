@@ -1,18 +1,30 @@
 // DKK Intake Server — Port 3333
 // Square API integration — listens for intake form submissions
+// Uses ONLY DDK credentials from environment
 
 import { createServer } from 'node:http';
 
 const PORT = 3333;
 const ADDRESS = '0.0.0.0';
 
-// Read credentials from environment (never hardcoded)
-const SQUARE_TOKEN = process.env.SQUARE_TOKEN || '';
+// DDK credentials only — no BTC tokens anywhere
+const SQUARE_TOKEN = process.env.SQUARE_ACCESS_TOKEN || '';
 const SQUARE_API_VERSION = process.env.SQUARE_API_VERSION || '2025-06-03';
-const DKK_LOCATION_ID = process.env.DKK_LOCATION_ID || 'L8XCP3V5E186Y';
+const DKK_LOCATION_ID = process.env.DKK_LOCATION_ID || '';
 
 function log(msg) {
   console.log(`[DKK-INTAKE] ${msg}`);
+}
+
+if (!SQUARE_TOKEN) {
+  console.error('ERROR: SQUARE_ACCESS_TOKEN not set. Set it in your shell before starting:');
+  console.error('  export SQUARE_ACCESS_TOKEN="your-token-here"');
+  process.exit(1);
+}
+if (!DKK_LOCATION_ID) {
+  console.error('ERROR: DKK_LOCATION_ID not set. Set it in your shell before starting:');
+  console.error('  export DKK_LOCATION_ID="L8XCP3V5E186Y"');
+  process.exit(1);
 }
 
 async function squareFetch(path, options = {}) {
@@ -56,6 +68,7 @@ function buildCustomerName(fullName = '') {
 }
 
 async function findCustomerByEmail(email) {
+  if (!email) return null;
   const result = await squareFetch(`/v2/customers?email=${encodeURIComponent(email)}`);
   if (!result.success) return null;
   return result.body?.customers?.[0] || null;
@@ -95,12 +108,10 @@ async function updateCustomerNote(customerId, notesObj) {
 async function handleIntake(data) {
   log(`Received intake: ${JSON.stringify({ parentName: data.parentName || data.name, parentEmail: data.parentEmail })}`);
 
-  // Validate required fields
   if (!data.parentEmail) {
     return { success: false, error: 'Missing parent email' };
   }
 
-  // Check if customer exists by email
   const existing = await findCustomerByEmail(data.parentEmail);
 
   let customerResult;
@@ -117,7 +128,6 @@ async function handleIntake(data) {
     return { success: false, error: 'No customer ID returned' };
   }
 
-  // Save intake notes
   const noteData = {
     studentCount: data.studentCount || 1,
     studentNames: data.studentNames || '',
@@ -159,6 +169,7 @@ const server = createServer((req, res) => {
       status: 'ok',
       locationId: DKK_LOCATION_ID,
       tokenSet: !!SQUARE_TOKEN,
+      version: '1.0',
     }));
   } else {
     res.writeHead(404, { 'Content-Type': 'application/json' });
@@ -168,6 +179,7 @@ const server = createServer((req, res) => {
 
 server.listen(PORT, ADDRESS, () => {
   console.log(`DKK intake server listening on ${ADDRESS}:${PORT}`);
-  console.log(`SQUARE_TOKEN: ${SQUARE_TOKEN ? 'SET' : 'NOT SET'}`);
+  console.log(`SQUARE_ACCESS_TOKEN: ${SQUARE_TOKEN ? '***SET***' : 'NOT SET'}`);
   console.log(`DKK_LOCATION_ID: ${DKK_LOCATION_ID}`);
+  console.log(`SQUARE_API_VERSION: ${SQUARE_API_VERSION}`);
 });
