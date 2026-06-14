@@ -1,9 +1,0 @@
-tunnel: 2d88b4b7-3a92-4ca3-aa79-9ea5d90485bb
-credentials-file: /home/henlafon/.cloudflared/2d88b4b7-3a92-4ca3-aa79-9ea5d90485bb.json
-
-ingress:
-  - hostname: besttherapylowell.com
-    path: /dkk-intake
-    service: http://localhost:3333
-  - service: http://localhost:8188
-  - service: http_status:404

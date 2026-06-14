@@ -1,2 +1,15 @@
+# Secrets
+.env
+
+# Server files (local only)
 dkk-intake-3333.js
+cloudflared-config.yml
+start-dkk.sh
+
+# Systemd service files (local only)
+dkk-intake.service
+dkk-tunnel.service
+
+# Local context/docs
+ddk_discord_context.md
 .env
