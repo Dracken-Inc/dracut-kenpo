@@ -1,0 +1,17 @@
+[Unit]
+Description=DKK Intake Cloudflare Tunnel
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=henlafon
+WorkingDirectory=/home/henlafon
+ExecStart=/usr/bin/cloudflared --config /tmp/cloudflared-config.yml tunnel run gb10-intake
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

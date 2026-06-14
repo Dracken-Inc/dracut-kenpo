@@ -1,0 +1,20 @@
+[Unit]
+Description=DKK Intake Server
+After=network.target
+
+[Service]
+Type=simple
+User=henlafon
+WorkingDirectory=/home/henlafon/projects/dracut-kenpo
+ExecStart=/home/henlafon/ai/bin/node /home/henlafon/projects/dracut-kenpo/dkk-intake-3333.js
+Restart=always
+RestartSec=5
+Environment=DKK_SQUARE_ACCESS_TOKEN=EAAAl7HJR_JObTzGvSRFIYd4AJ3bmXHXqZoDAvHHFmAIHku07vgzVaXe1XAUjL8h
+Environment=DKK_SQUARE_LOCATION_ID=L8XCP3V5E186Y
+Environment=DKK_SQUARE_API_VERSION=2025-06-03
+Environment=NODE_PATH=/home/henlafon/ai/lib/node_modules
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
