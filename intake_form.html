@@ -41,7 +41,7 @@ body{
 /* Header */
 .header{
   background:var(--primary);
-  padding:40px 16px 32px;text-align:center;
+  padding:36px 16px 28px;text-align:center;
   position:relative;
   box-shadow:0 2px 12px rgba(200,16,46,.25);
 }
@@ -50,12 +50,21 @@ body{
   background:var(--dark-2);
 }
 .header-logo{
-  width:100%;max-width:260px;
-  height:auto;
   display:block;
-  margin:0 auto 14px;
+  margin:0 auto 10px;
+  height:auto;
+  max-height:180px;
   -webkit-transform:translateZ(0);
   transform:translateZ(0);
+}
+.header-text{
+  font-size:.7rem;
+  color:rgba(255,255,255,.9);
+  letter-spacing:.06em;
+  font-weight:700;
+  text-transform:uppercase;
+  margin-bottom:12px;
+  text-align:center;
 }
 .header-sub{
   font-size:.82rem;color:rgba(255,255,255,.85);letter-spacing:.06em;
@@ -189,13 +198,14 @@ textarea{resize:vertical;min-height:64px}
 }
 @media(min-width:600px){
   .container{padding:24px 20px}
-  .header{padding:32px 20px 28px}
+  .header{padding:28px 20px 24px}
 }
 </style>
 </head>
 <body>
 
 <div class="header">
+  <div class="header-text">Dracut Kenpo Karate</div>
   <img class="header-logo" src="logo.png" alt="Dracut Kenpo Karate">
   <div class="header-sub">Student Intake</div>
 </div>
@@ -312,7 +322,7 @@ textarea{resize:vertical;min-height:64px}
     <div class="success-icon">✅</div>
     <h2>You're All Set!</h2>
     <p>Thanks for enrolling with Dracut Kenpo Karate.<br>
-    Gabe will reach out to confirm your schedule.</p>
+    Sensei Gabriel will reach out to confirm your schedule.</p>
     <button class="btn btn-primary" onclick="location.reload()" style="max-width:280px;margin:0 auto">
       Submit Another
     </button>
